@@ -4,16 +4,16 @@ import 'package:result_app/widgets/combined_temp.dart';
 import 'package:result_app/widgets/image.dart';
 
 class WeatherPost extends StatelessWidget {
-  WeatherPost(this.weatherData);
+  WeatherPost(this.weatherData, this.windowSize);
 
   final Weather weatherData;
-
+  final double windowSize;
   @override
   Widget build(BuildContext context) {
     return Container(
         padding: EdgeInsets.all(10),
         height: 350,
-        width: double.maxFinite,
+        width: (windowSize > 700) ? 500 : double.maxFinite,
         child: Card(
           elevation: 5,
           child: Padding(

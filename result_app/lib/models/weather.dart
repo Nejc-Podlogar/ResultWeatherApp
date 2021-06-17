@@ -55,7 +55,6 @@ class Weather extends Equatable {
 
   static WeatherType _mapStringToWeatherType(String type) {
     WeatherType state;
-    print(type);
     switch (type) {
       case "Clouds":
         state = WeatherType.Clouds;

@@ -7,6 +7,18 @@ import 'package:result_app/widgets/widgets.dart';
 export 'package:result_app/blocs/weather_bloc/weather_bloc.dart';
 
 class Weather extends StatelessWidget {
+
+  List<Widget> _generateChildren(int count, double sizeOfWindow, dynamic weatherResult){
+    List<Widget> listOfElements = [];
+
+    for( int i = 0; i < count; i++){
+      listOfElements.add(WeatherPost(weatherResult[i], sizeOfWindow));
+    }
+
+    return listOfElements;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +56,26 @@ class Weather extends StatelessWidget {
           } else if (state is WeatherSuccess) {
             final weatherResult = state.weatherData;
             if(weatherResult.isNotEmpty){
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: weatherResult.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return WeatherPost(weatherResult[index]);
-                  });
+              return LayoutBuilder(builder: (context, constraints){
+
+                if(constraints.maxWidth > 700){
+                  return  SizedBox(
+                    width: double.infinity,
+                    height: double.infinity,
+                    child: Center(child:
+                      Wrap( spacing: 8.0, runSpacing: 2.0, children: _generateChildren(weatherResult.length, constraints.maxWidth, weatherResult)))
+
+                  );
+                }else{
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: weatherResult.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return WeatherPost(weatherResult[index], constraints.maxWidth);
+                      });
+                }
+              },);
+
             }else{
               return
                 Padding(padding: EdgeInsets.symmetric(horizontal: 10),child: Center(

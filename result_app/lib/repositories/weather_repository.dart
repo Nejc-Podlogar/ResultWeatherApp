@@ -9,7 +9,6 @@ class WeatherRepository {
   WeatherRepository({@required this.weatherClient}) : assert(weatherClient != null);
 
   Future<Weather> getCurrWeather(String cityName) async {
-    print("Repositorij");
     return weatherClient.getWeather(cityName);
   }
 }

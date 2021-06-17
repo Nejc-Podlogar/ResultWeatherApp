@@ -27,6 +27,14 @@ class _CitySelectState extends State<CitySelect> {
                       controller: _textEditingController,
                       decoration: InputDecoration(labelText: 'Mesto'),
                       autofocus: true,
+                      onFieldSubmitted: (value){
+                        if (_textEditingController.text != "") {
+                          setState(() {
+                            allCities.add(_textEditingController.text);
+                            _textEditingController.text = "";
+                          });
+                        }
+                      },
                     ),
                   ),
                 ),

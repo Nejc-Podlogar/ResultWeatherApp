@@ -9,12 +9,10 @@ class CombinedTemp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(this.temp);
-    print(this.maxTemp);
-    print(this.minTemp);
     return Wrap(
       direction: Axis.horizontal,
       spacing: 8.0,
+      runSpacing: 8.0,
       alignment: WrapAlignment.center,
       children: [
         Chip(

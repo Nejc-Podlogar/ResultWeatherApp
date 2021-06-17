@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:result_app/models/models.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:connectivity/connectivity.dart';
 
 class WeatherClient {
   static const rootUrl = "https://api.openweathermap.org/data/2.5";
@@ -21,17 +21,15 @@ class WeatherClient {
     final weatherUrl =
         '$rootUrl/weather?q=$cityName&appId=$appId&lang=sl&units=metric';
     dynamic weatherJson;
-    print("Pridobivam.....");
     try{
-      final checkConnection = await InternetAddress.lookup("example.com");
-      print("Check location: ");
-      print(checkConnection);
-      if(checkConnection.isNotEmpty && checkConnection[0].rawAddress.isNotEmpty){
+      final _connectivityResult = await (Connectivity().checkConnectivity());
+      //final checkConnection = await InternetAddress.lookup("example.com");
+      //if(checkConnection.isNotEmpty && checkConnection[0].rawAddress.isNotEmpty){
+      if(_connectivityResult != ConnectivityResult.none){
         final response = await this.httpClient.get(weatherUrl);
 
         /* Dodaj hendlanje errorjev */
         if(response.statusCode != 200){
-          print("Local storage pridobivanje");
           weatherJson = await getWeatherLocal(cityName);
 
         }else{
@@ -40,11 +38,8 @@ class WeatherClient {
         }
       }
 
-      print(weatherJson);
-      print("shranjeno");
       return Weather.fromJson(weatherJson);
     } catch (_) {
-      print("No internet");
       weatherJson = await getWeatherLocal(cityName);
       if(weatherJson == null){
         return null;
@@ -65,7 +60,6 @@ class WeatherClient {
   Future<dynamic> getWeatherLocal(String name) async{
     final _prefs = await SharedPreferences.getInstance();
     final data = await _prefs.getString(name) ?? "";
-    print("Getting weather data locally");
     if(data != ""){
       final jsonData = jsonDecode(data);
       return jsonData;

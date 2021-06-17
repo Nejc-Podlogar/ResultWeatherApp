@@ -25,7 +25,6 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
       try {
         List<Weather> weatherList = [];
         Weather weather;
-        print("Nejc je zakon");
         for (var i = 0; i < event.cityName.length; i++) {
           weather = await weatherRepository.getCurrWeather(event.cityName[i]);
           if(weather != null){
